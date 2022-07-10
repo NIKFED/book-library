@@ -11,21 +11,21 @@ use App\Helpers\Placeholders\CategoryPlaceholder;
 use App\Helpers\Placeholders\StatusPlaceholder;
 use Illuminate\Console\Command;
 
-class ParseBookJson extends Command
+class ImportBookWithParsing extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'parse:book-json';
+    protected $signature = 'import:book';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Parse book.json';
+    protected $description = 'import book with parse book.json';
 
     public function handle()
     {
