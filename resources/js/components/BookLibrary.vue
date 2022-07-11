@@ -1,13 +1,12 @@
 <template>
-  <div>
-    Hello
+  <div class="container">
+    <p>Panel</p>
   </div>
 </template>
 
 <script>
 export default {
   name: 'BookLibrary',
-  components: { },
   data() {
     return {
 
@@ -15,13 +14,14 @@ export default {
   },
 
   async mounted() {
-    await this.fetchData();
+    console.log('here');
+    // await this.fetchData();
   },
 
   methods: {
-    async fetchData() {
-
-    },
+    // async fetchData() {
+    //
+    // },
   }
 }
 </script>

@@ -24,4 +24,5 @@
         <div id="app"></div>
     </body>
     <script src="{{ mix('js/app.js') }}"></script>
+{{--    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>--}}
 </html>
