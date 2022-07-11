@@ -18,4 +18,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('dictionaries', [\App\Http\Controllers\DictionaryController::class, 'getGroup'])->name('dictionaries');
+Route::resource('book', \App\Http\Controllers\Rest\BookController::class, [
+    'only' => ['index', 'show', 'store', 'update', 'destroy']
+]);
+
+Route::post('dictionaries', [\App\Http\Controllers\DictionaryController::class, 'getGroup']);
+
+Route::post('dictionary/{dictionaryName}', [\App\Http\Controllers\Rest\DictionaryController::class ,'store']);
+Route::put('dictionary/{dictionaryName}/{id}', [\App\Http\Controllers\Rest\DictionaryController::class ,'update']);
+Route::delete('dictionary/{dictionaryName}/{id}', [\App\Http\Controllers\Rest\DictionaryController::class ,'destroy']);

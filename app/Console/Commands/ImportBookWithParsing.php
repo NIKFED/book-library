@@ -44,7 +44,7 @@ class ImportBookWithParsing extends Command
 
             $bookFields = $parser->getBookFields();
             if (!isset($bookFields['isbn'])) {
-                $this->info('The ' . $bookFields['title'] . ' book did not have isbn');
+                $this->info('The "' . $bookFields['title'] . '" book does not have isbn');
                 continue;
             }
             $bookFields['book_status_id'] = $statusPlaceholder->getInstanceId();

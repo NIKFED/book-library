@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Dictionaries\Author;
+use App\Models\Dictionaries\Category;
+use App\Models\Dictionaries\Status;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -60,16 +64,16 @@ class Book extends Model
 
     public function status(): BelongsTo
     {
-        return $this->belongsTo(Book::class, 'book_status_id', 'id');
+        return $this->belongsTo(Status::class, 'book_status_id', 'id');
     }
 
-    public function authors(): HasMany
+    public function authors(): BelongsToMany
     {
-        return $this->hasMany(AuthorBook::class, 'book_id', 'id');
+        return $this->belongsToMany(Author::class, 'author_books', 'book_id');
     }
 
-    public function categories(): HasMany
+    public function categories(): BelongsToMany
     {
-        return $this->hasMany(BookCategory::class, 'book_id', 'id');
+        return $this->belongsToMany(Category::class, 'book_categories', 'book_id');
     }
 }

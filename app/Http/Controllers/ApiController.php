@@ -14,7 +14,7 @@ abstract class ApiController extends Controller
         return $this->statusCode;
     }
 
-    protected function setStatusCode($statusCode): static
+    protected function setStatusCode(int $statusCode): static
     {
         $this->statusCode = $statusCode;
         return $this;
@@ -58,6 +58,6 @@ abstract class ApiController extends Controller
 
     protected function handleHttpException(Exception $e): JsonResponse
     {
-        return $this->setStatusCode($e->getCode())->respondWithError($e->getMessage());
+        return $this->setStatusCode((int)$e->getCode())->respondWithError($e->getMessage());
     }
 }
