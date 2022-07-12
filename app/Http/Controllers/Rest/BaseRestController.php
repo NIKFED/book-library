@@ -76,6 +76,7 @@ abstract class BaseRestController extends ApiController
 
         $data = $this->request->all();
 
+
         try {
             $resource = $this->fillData($resource, $data);
             return $this->performUpdate($resource);

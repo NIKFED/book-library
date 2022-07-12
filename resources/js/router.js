@@ -1,13 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import BookLibrary from './components/BookLibrary';
+import BookList from './components/BookList';
+import Book from './components/Book';
 import DictionaryList from "./components/dictionary/DictionaryList";
 
 Vue.use(VueRouter);
 
 const routes = [
-    { path: '/', component: BookLibrary },
-    { path: '/dictionary-list', component: DictionaryList }
+    { path: '/book-list', component: BookList },
+    { path: '/book/:bookId', component: Book },
+    { path: '/dictionary-list/:dictionaryName', component: DictionaryList }
 ];
 
 const router = new VueRouter({

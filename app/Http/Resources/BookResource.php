@@ -12,6 +12,7 @@ class BookResource extends JsonResource
     {
         /** @var Book $this */
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'isbn' => $this->isbn,
             'page_count' => $this->page_count,
@@ -19,9 +20,11 @@ class BookResource extends JsonResource
             'short_description' => $this->short_description,
             'long_description' => $this->long_description,
             'published_date' => Carbon::parse($this->published_date)->format('Y-m-d H:m:s'),
-            'book_status' => new DictionaryResource($this->status),
-            'authors' => AuthorResource::collection($this->authors),
+            'status' => new DictionaryResource($this->status),
+            'authors' => DictionaryResource::collection($this->authors),
             'categories' => DictionaryResource::collection($this->categories),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -29,5 +29,4 @@ export default class Resource {
         const { data } = await axios.delete(this.url + '/' + params.id, params);
         return data
     }
-
 }

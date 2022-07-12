@@ -11,7 +11,6 @@ import App from './app.vue';
 import router from './router';
 import store from './store';
 import './icons';
-import adminLte from 'admin-lte';
 
 Vue.config.productionTip = false
 

@@ -10,12 +10,14 @@ use JetBrains\PhpStorm\ArrayShape;
 class DictionaryResource extends JsonResource
 {
     #[ArrayShape([
+        'id' => "int",
         'name' => "string"
     ])]
     public function toArray($request): array
     {
         /** @var Dictionary $this */
         return [
+            'id' => $this->id,
             'name' => $this->name,
         ];
     }

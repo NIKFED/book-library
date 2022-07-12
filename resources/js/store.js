@@ -17,6 +17,9 @@ export default new Vuex.Store ({
         setDicts (state, dicts) {
             state.dicts = { ...state.dicts, ...dicts };
         },
+        updateDict: (state, {dict}) => {
+            state.dicts = {...state.dicts, ...dict}
+        },
     },
 
     actions: {
@@ -25,6 +28,15 @@ export default new Vuex.Store ({
                 commit('setDicts', dicts);
             });
         },
+        fetchDict: ({ commit, state }, dictName) => {
+            return new Promise((resolve, reject) => {
+                Api.dict(dictName).then(({ data }) => {
+                    commit('updateDict', { dict: data })
+                    resolve()
+                })
+            })
+        },
+
     },
 
     getters: {

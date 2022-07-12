@@ -15,14 +15,14 @@ class AuthorPlaceholder extends Placeholder
     protected function fillInstance()
     {
         $this->instance?->fill([
-            'full_name' => $this->fillable['author'],
+            'name' => $this->fillable['author'],
         ]);
     }
 
     public function getInstance(): bool
     {
         $fullName = $this->fillable['author'];
-        $model = Author::query()->where('full_name', $fullName)->first();
+        $model = Author::query()->where('name', $fullName)->first();
         if (!$model) {
             $this->instance = new Author();
             return true;

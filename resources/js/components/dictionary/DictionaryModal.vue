@@ -1,12 +1,9 @@
 <template>
-    <l-modal v-model="isShow" size="lg" :title="modalName" centered>
+    <b-modal v-model="isShow" size="lg" :title="modalName" centered>
         <b-container fluid>
-            <l-form-group label="Краткое описание" required>
-                <b-input v-model="data.dv" size="sm"/>
-            </l-form-group>
-            <l-form-group label="Полное описание" required>
-                <b-input v-model="data.fdv" size="sm"/>
-            </l-form-group>
+          <b-form-group label="Name">
+            <b-form-input v-model="data.name" size="sm"></b-form-input>
+          </b-form-group>
         </b-container>
         <div slot="modal-footer">
             <b-button
@@ -15,7 +12,7 @@
                 variant="secondary"
                 @click="close"
             >
-                Закрыть
+                Close
             </b-button>
             <b-button
                 size="sm"
@@ -24,81 +21,71 @@
                 style="margin-right: 15px;"
                 @click="save"
             >
-                <i class="fa fa-floppy-o" aria-hidden="true"></i> Сохранить
+                <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
             </b-button>
         </div>
-    </l-modal>
+    </b-modal>
 </template>
 
 <script>
 import DictItemResource from "../../resources/dict_item"
 
 export default {
-    name: 'DictionaryModal',
-    props: {
-        model: {
-            type: Object,
-            default: null,
-        },
-        isShow: {
-            type: Boolean,
-            default: false,
-        },
-        modelName: {
-            type: String,
-            default: ''
-        }
+  name: 'DictionaryModal',
+  props: {
+    model: {
+      type: Object,
+      default: null,
     },
+    isShow: {
+      type: Boolean,
+      default: false,
+    },
+    modelName: {
+      type: String,
+      default: '',
+    }
+  },
 
     data: () => ({
-        newModel: {
-            dv: '',
-            fdv: ''
-        },
+      newModel: {
+        name: '',
+      },
     }),
 
     computed: {
-        data() {
-            return this.model || this.newModel
-        },
+      data() {
+        return this.model || this.newModel;
+      },
 
-        modalName() {
-            switch (this.modelName) {
-                case 'dict_property_statuses':
-                    return 'Статусы имущества'
-                case 'dict_property_usages':
-                    return 'Целевые функции'
-                case 'dict_target_functions':
-                    return 'Назначение'
-                default:
-                    return ''
-            }
-        }
+      modalName() {
+        return this.modelName.charAt(0).toUpperCase() + this.modelName.slice(1);
+      }
     },
 
     async mounted() {
-        await this.fetchData();
+      await this.fetchData();
     },
 
     methods: {
-        async fetchData() {},
+      async fetchData() {},
 
-        close() {
-            this.$emit('on-close');
-        },
+      close() {
+        this.$emit('on-close');
+      },
 
-        save() {
-            this.close();
-            if (this.data.id) {
-                DictItemResource.update(this.modelName, { id: this.data.id, item: this.data }).then((response) => {
-                    this.$store.dispatch('FETCH_DICT', this.modelName);
-                })
-            } else {
-                DictItemResource.save(this.modelName, this.data, true).then((response) => {
-                    this.$store.dispatch('FETCH_DICT', this.modelName);
-                })
-            }
-        },
+      save() {
+        this.close();
+        if (this.data.id) {
+          DictItemResource.update(this.modelName, { id: this.data.id, item: this.data }).then((response) => {
+            this.$store.dispatch('fetchDict', this.modelName);
+          });
+        } else {
+          DictItemResource.save(this.modelName, this.data, true).then((response) => {
+            this.$store.dispatch('fetchDict', this.modelName);
+          });
+        }
+      },
     },
 };
 </script>

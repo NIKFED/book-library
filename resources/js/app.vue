@@ -1,15 +1,21 @@
 <template>
   <div id="book-library">
-    <panel></panel>
-    <router-view></router-view>
+    <navbar></navbar>
+    <sidebar></sidebar>
+    <div class="content-wrapper">
+      <router-view></router-view>
+    </div>
+    <footer></footer>
   </div>
 </template>
 
 <script>
-import Panel from './components/dashboard/Panel';
+import Navbar from './components/dashboard/Navbar';
+import Sidebar from './components/dashboard/Sidebar';
+import Footer from './components/dashboard/Footer';
 
 export default {
   name: 'App',
-  components: { Panel },
+  components: { Navbar, Sidebar, Footer },
 }
 </script>

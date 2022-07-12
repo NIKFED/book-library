@@ -16,6 +16,7 @@ import {
     faThLarge,
     faUsers,
     faFile,
+    faBookOpen,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -42,6 +43,7 @@ library.add(
     faThLarge,
     faUsers,
     faFile,
+    faBookOpen,
 
     faCircle,
     faEnvelope,

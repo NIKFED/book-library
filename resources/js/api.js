@@ -12,4 +12,10 @@ export default {
         });
         return data;
     },
+
+    dict(dictName) {
+        return axios.post('/api/dictionaries', {
+            data: JSON.stringify([dictName]),
+        });
+    },
 }

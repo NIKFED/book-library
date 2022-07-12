@@ -18,7 +18,7 @@ class ImportBookWithParsing extends Command
      *
      * @var string
      */
-    protected $signature = 'import:book';
+    protected $signature = 'import:book {--url=}';
 
     /**
      * The console command description.
@@ -29,7 +29,11 @@ class ImportBookWithParsing extends Command
 
     public function handle()
     {
-        $data = file_get_contents(base_path('data/books.json'));
+        $url = $this->option('url');
+        if (!$url) {
+            $url = 'https://gitlab.com/prog-positron/test-app-vacancy/-/raw/master/books.json';
+        }
+        $data = file_get_contents($url);
         $books = json_decode($data, true);
 
         $parser = new JsonBookParser();
@@ -47,6 +51,15 @@ class ImportBookWithParsing extends Command
                 $this->info('The "' . $bookFields['title'] . '" book does not have isbn');
                 continue;
             }
+            if (isset($bookFields['thumbnail_url']) && !file_exists('public/img/books/' . basename($bookFields['thumbnail_url']))) {
+                $filePath = 'public/img/books/' . basename($bookFields['thumbnail_url']);
+                try {
+                    file_put_contents($filePath, file_get_contents($bookFields['thumbnail_url']));
+                    $bookFields['thumbnail_url'] = $filePath;
+                } catch (\Exception) {
+                    $this->info('The "' . $bookFields['title'] . '" book: file upload error');
+                }
+            }
             $bookFields['book_status_id'] = $statusPlaceholder->getInstanceId();
             $bookPlaceholder = new BookPlaceholder($bookFields);
             $bookPlaceholder->CFS();
@@ -56,6 +69,15 @@ class ImportBookWithParsing extends Command
             $categoriesFields = $parser->getCategoryFields();
             foreach ($categoriesFields['categories'] as $categoryFields) {
                 $categoryPlaceholder = new CategoryPlaceholder(['category' => $categoryFields]);
+                $categoryPlaceholder->CFS();
+
+                $bookCategoriesFields[] = [
+                    'book_id' => $bookPlaceholder->getInstanceId(),
+                    'category_id' => $categoryPlaceholder->getInstanceId(),
+                ];
+            }
+            if (empty($bookCategoriesFields)) {
+                $categoryPlaceholder = new CategoryPlaceholder(['category' => 'Novelty']);
                 $categoryPlaceholder->CFS();
 
                 $bookCategoriesFields[] = [
