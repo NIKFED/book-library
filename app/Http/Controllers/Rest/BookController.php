@@ -7,6 +7,7 @@ use App\Http\Resources\BookCollection;
 use App\Http\Resources\BookResource;
 use App\Models\AuthorBook;
 use App\Models\Book;
+use App\Models\BookCategory;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -97,7 +98,7 @@ class BookController extends ApiController
             $resource = $this->fillData($resource, $data);
             $resource->save();
 
-            $collection = $resource->authorBooks;
+            $authorsCollection = $resource->authorBooks;
             if ($this->request->has('authors')) {
                 foreach ($this->request->get('authors') as $authorBook) {
                     $authorBook = json_decode($authorBook);
@@ -105,17 +106,39 @@ class BookController extends ApiController
                     $filteredCollection = $resource->authors->filter(function ($value, $key) use ($authorBookId) {
                         return $value->author_id !== $authorBookId;
                     });
-                    if ($collection->count() === $filteredCollection->count()) {
+                    if ($authorsCollection->count() === $filteredCollection->count()) {
                         $authorBookResource = new AuthorBook();
                         $authorBookResource->author_id = $authorBookId;
                         $authorBookResource->book_id = $resource->id;
                         $authorBookResource->save();
                     } else {
-                        $collection = $filteredCollection;
+                        $authorsCollection = $filteredCollection;
                     }
                 }
             }
-            foreach ($collection as $item) {
+            foreach ($authorsCollection as $item) {
+                $item->delete();
+            }
+
+            $categoriesCollection = $resource->bookCategories;
+            if ($this->request->has('categories')) {
+                foreach ($this->request->get('categories') as $bookCategory) {
+                    $bookCategory = json_decode($bookCategory);
+                    $bookCategoryId = $bookCategory->id;
+                    $filteredCollection = $resource->categories->filter(function ($value, $key) use ($bookCategory) {
+                        return $value->category_id !== $bookCategory;
+                    });
+                    if ($categoriesCollection->count() === $filteredCollection->count()) {
+                        $bookCategoryResource = new BookCategory();
+                        $bookCategoryResource->category_id = $bookCategoryId;
+                        $bookCategoryResource->book_id = $resource->id;
+                        $bookCategoryResource->save();
+                    } else {
+                        $categoriesCollection = $filteredCollection;
+                    }
+                }
+            }
+            foreach ($categoriesCollection as $item) {
                 $item->delete();
             }
 

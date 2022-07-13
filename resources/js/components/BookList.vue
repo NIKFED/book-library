@@ -23,6 +23,12 @@
               <b-badge variant="success">
                 {{ book.status.name }}
               </b-badge>
+              <b-button
+                  variant="primary"
+                  size="sm"
+                  :to="'book/' + book.id">
+                <b-icon icon="arrow-up-right"></b-icon>
+              </b-button>
             </template>
           </b-card>
         </div>
