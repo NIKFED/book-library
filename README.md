@@ -3,7 +3,6 @@
 ## Команды по развертыванию приложения
 
 - composer install
-- 
 - php(./vendor/bin/sail) artisan migrate
 - php(./vendor/bin/sail) import:book
 - php artisan serve (./vendor/bin/sail sail up -d)
