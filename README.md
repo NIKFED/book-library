@@ -6,6 +6,6 @@
 - composer install
 - php(./vendor/bin/sail) artisan migrate
 - php(./vendor/bin/sail) import:book
-- php artisan serve (./vendor/bin/sail sail up -d)
+- php artisan serve (./vendor/bin/sail up -d)
 - npm install
 - npm run dev
