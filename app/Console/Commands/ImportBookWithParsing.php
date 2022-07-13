@@ -52,7 +52,7 @@ class ImportBookWithParsing extends Command
                 continue;
             }
             if (isset($bookFields['thumbnail_url']) && !file_exists('public/img/books/' . basename($bookFields['thumbnail_url']))) {
-                $filePath = 'public/img/books/' . basename($bookFields['thumbnail_url']);
+                $filePath = 'img/books/' . basename($bookFields['thumbnail_url']);
                 try {
                     file_put_contents($filePath, file_get_contents($bookFields['thumbnail_url']));
                     $bookFields['thumbnail_url'] = $filePath;

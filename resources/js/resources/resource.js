@@ -10,13 +10,13 @@ export default class Resource {
     }
 
     static async get (params) {
-        const { data } = await axios.get(this.url + '/' + params.id)
+        const { data } = await axios.get(this.url + '/' + params.id);
         return data;
     }
 
     static async save (params, forcePost = false) {
-        const id = params.id || (params instanceof FormData && params.get('id'))
-        const method = id && !forcePost ? 'put' : 'post'
+        const id = params.id || (params instanceof FormData && params.get('id'));
+        const method = id && !forcePost ? 'put' : 'post';
         const { data } = await axios.request({
             method,
             url: id ? this.url + '/' + id : this.url,

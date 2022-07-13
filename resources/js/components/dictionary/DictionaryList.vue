@@ -120,7 +120,6 @@ export default {
     currentPage: 1,
     isShowDictionaryModal: false,
     currentDictionaryItem: null,
-    dictName: '',
     fields: [
       {
         label: '#',
@@ -153,19 +152,14 @@ export default {
   computed: {
     data () {
       return this.$store.getters.getDict(this.dictName);
+    },
+
+    dictName() {
+      return this.$route.params.dictionaryName;
     }
   },
 
-  async mounted () {
-    await this.fetchData();
-  },
-
   methods: {
-    async fetchData() {
-      this.dictName = this.$route.params.dictionaryName;
-      console.log(this.dictName);
-    },
-
     formatDate(isoString) {
       const date = moment.parseZone(isoString);
       return date.format('DD.MM.YYYY HH:mm');
@@ -185,7 +179,7 @@ export default {
       DictItemResource.delete(this.dictName, item).then((_) => {
         this.$store.dispatch('fetchDict', this.dictName);
       });
-    }
+    },
   },
 
 }

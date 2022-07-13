@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\Rest;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Resources\BookCollection;
 use App\Http\Resources\BookResource;
 use App\Models\AuthorBook;
 use App\Models\Book;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Traits\Paginatable;
 
 class BookController extends ApiController
 {
+    use Paginatable;
+
     protected Request $request;
-    /**
-     * @var Book
-     */
     protected Book $model;
 
 
@@ -146,8 +147,8 @@ class BookController extends ApiController
 
     protected function performIndex($user): JsonResponse
     {
-        $books = $this->model->query()->get();
-        return $this->respond(BookResource::collection($books));
+        $books = $this->model->query()->paginate(12);
+        return $this->respond(new BookCollection($books));
     }
 
     protected function performStore($resource): JsonResponse

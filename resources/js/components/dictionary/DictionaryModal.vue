@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import DictItemResource from "../../resources/dict_item"
+import DictItemResource from "../../resources/dict_item";
 
 export default {
   name: 'DictionaryModal',

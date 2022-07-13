@@ -24,6 +24,8 @@ Route::resource('book', \App\Http\Controllers\Rest\BookController::class, [
 
 Route::post('dictionaries', [\App\Http\Controllers\DictionaryController::class, 'getGroup']);
 
-Route::post('dictionary/{dictionaryName}', [\App\Http\Controllers\Rest\DictionaryController::class ,'store']);
-Route::put('dictionary/{dictionaryName}/{id}', [\App\Http\Controllers\Rest\DictionaryController::class ,'update']);
-Route::delete('dictionary/{dictionaryName}/{id}', [\App\Http\Controllers\Rest\DictionaryController::class ,'destroy']);
+Route::post('dictionary/{dictionaryName}', [\App\Http\Controllers\Rest\DictionaryController::class, 'store']);
+Route::put('dictionary/{dictionaryName}/{id}', [\App\Http\Controllers\Rest\DictionaryController::class, 'update']);
+Route::delete('dictionary/{dictionaryName}/{id}', [\App\Http\Controllers\Rest\DictionaryController::class, 'destroy']);
+
+Route::get('category/{categoryId}/books', [\App\Http\Controllers\Rest\CategoryController::class, 'getBooksWithCategoryId']);

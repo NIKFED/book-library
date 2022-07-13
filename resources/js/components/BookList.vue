@@ -1,104 +1,107 @@
 <template>
   <div>
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Books</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <b-list-group>
-              <b-list-group-item
-                  v-for="(book, key) in books"
-                  :key="key"
-                  :to="`book/${book.id}`"
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex flex-wrap justify-space-between">
+          <b-card
+              v-for="(book, key) in books"
+              :key="key"
+              no-body
+              :img-src="book.thumbnail_url || 'img/dashboard/default-150x150.png'"
+              class="ml-2"
+              style="width: 15%;">
+            <template #header>
+              <h4 class="mb-0">{{ book.title }}</h4>
+              <b-badge
+                  v-for="(category, keyCategories) in book.categories"
+                  :key="keyCategories"
+                  variant="primary"
+                  class="ml-1"
               >
-                <b-card
-                    no-body
-                    style="width: 20rem; height: 55rem;"
-                    :img-src="book.thumbnail_url || 'img/default-150x150.png'"
-                    img-alt="Image"
-                    img-top
-                    class="ml-4"
-                >
-                  <template #header>
-                    <h4 class="mb-0">{{ book.title }}</h4>
-                    <b-badge
-                        v-for="(category, keyCategories) in book.categories"
-                        :key="keyCategories"
-                        variant="primary"
-                        class="ml-1"
-                    >
-                      {{ category.name }}
-                    </b-badge>
-                  </template>
-
-                  <b-card-body>
-                    <div class="col-auto text-bold">
-                      ISBN: {{ book.isbn }}
-                    </div>
-                    <b-badge variant="success">
-                      {{ book.status.name }}
-                    </b-badge>
-                    <b-list-group flush>
-                      <div class="col-auto">
-                        Authors:
-                      </div>
-
-                      <b-list-group-item v-for="(author, keyAuthors) in book.authors" :key="keyAuthors">
-                        <div class="col-auto">
-                          {{ author.name }}
-                        </div>
-                      </b-list-group-item>
-                    </b-list-group>
-                    <div class="col-auto">
-                      Page count: {{ book.page_count }}
-                    </div>
-                  </b-card-body>
-
-
-                  <b-card-footer small>
-                    <span class="small text-muted">Published date: {{ book.published_date }}</span>
-                  </b-card-footer>
-                </b-card>
-              </b-list-group-item>
-            </b-list-group>
-          </div>
+                {{ category.name }}
+              </b-badge>
+              <b-badge variant="success">
+                {{ book.status.name }}
+              </b-badge>
+            </template>
+          </b-card>
         </div>
       </div>
-    </section>
+    </div>
+    <infinite-loading ref="infiniteLoading" spinner="spiral" @infinite="infiniteHandler">
+      <div slot="no-more" class="py-2 text-muted">
+        {{ books.length }} Books
+      </div>
+    </infinite-loading>
   </div>
 </template>
 
 <script>
-import BookResource from '../resources/book';
+import Book from '../models/book';
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
   name: 'BookList',
+  components: { InfiniteLoading },
+  props: {
+    category: {
+      type: Object,
+      default: null,
+    },
+    query: {
+      type: Object,
+      default: null,
+    }
+  },
+
   data: () => ({
     books: [],
+    pagination: {
+      current_page: 1,
+      page_size: 12,
+      total_entries: 0,
+    },
   }),
 
-  async mounted() {
-    await this.fetchData();
+  watch: {
+    category: {
+      async handler() {
+        this.pagination.current_page = 1;
+        this.books = [];
+        this.$refs.infiniteLoading.stateChanger.reset();
+      },
+      deep: true,
+    },
+    query: {
+      async handler() {
+        this.pagination.current_page = 1;
+        this.books = [];
+        this.$refs.infiniteLoading.stateChanger.reset();
+      },
+      deep: true,
+    },
   },
 
   methods: {
-    async fetchData() {
-      this.books = await BookResource.fetch();
+    async infiniteHandler($state) {
+      // const query = { ...this.query };
+      const data = {
+        'page': this.pagination.current_page,
+        'query': this.query,
+      };
+      const response = await Book.fetchByCategoryId(this.category.id, data);
+      this.pagination.total_entries = response.meta.total_entries;
+      if (response.data.length) {
+        this.pagination.current_page += 1;
+        this.books.push(...response.data);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
+
+    update() {
+      this.$refs.infiniteLoading.stateChanger.reset();
     },
   }
 }
