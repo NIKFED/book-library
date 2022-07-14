@@ -4,8 +4,16 @@
 ## Команды по развертыванию приложения
 
 - composer install
-- php(./vendor/bin/sail) artisan migrate
-- php(./vendor/bin/sail) import:book
-- php artisan serve (./vendor/bin/sail up -d)
+- php artisan migrate
+- php import:book
+- php artisan serve
+- npm install
+- npm run dev
+
+## Через докер
+- composer install
+- ./vendor/bin/sail up -d
+- ./vendor/bin/sail artisan migrate
+- ./vendor/bin/sail import:book
 - npm install
 - npm run dev
